@@ -1,64 +1,47 @@
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Card, CardContent } from '@/components/ui/card'
+import RichText from '@/components/RichText'
+import type { DefaultTypedEditorState } from '@payloadcms/richtext-lexical'
+import { Link2 } from 'lucide-react'
 
-interface HackathonCardProps {
-  title: string
-  description: string
-  location: string
-  dates: string
+interface Props {
+  title?: string
+  description?: string | DefaultTypedEditorState
   image?: string
-  links?: {
-    github?: string
-    live?: string
-  }
+  website?: string
 }
 
-export function HackathonCard({
-  title,
-  description,
-  location,
-  dates,
-  image,
-  links,
-}: HackathonCardProps) {
+export function HackathonCard({ title, description, image, website }: Props) {
   return (
-    <li className="relative pl-6 pb-6">
-      <div className="absolute left-0 top-0 h-full w-px bg-border"></div>
-      <div className="absolute left-0 top-0 h-2 w-2 rounded-full bg-foreground -translate-x-1/2"></div>
-      <Card className="ml-4 hover:shadow-md transition-shadow">
-        <CardContent className="p-4">
-          <div className="flex items-start gap-3">
-            {image && (
-              <div className="flex-shrink-0">
-                <Image src={image} alt={title} width={40} height={40} className="rounded-md" />
-              </div>
-            )}
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center justify-between mb-1">
-                <h3 className="font-semibold text-sm">{title}</h3>
-                <span className="text-xs text-muted-foreground">{dates}</span>
-              </div>
-              <p className="text-xs text-muted-foreground mb-2">{location}</p>
-              <p className="text-sm text-muted-foreground mb-3">{description}</p>
-              {links && (
-                <div className="flex gap-2">
-                  {links.github && (
-                    <Link href={links.github} className="text-xs text-blue-500 hover:underline">
-                      GitHub
-                    </Link>
-                  )}
-                  {links.live && (
-                    <Link href={links.live} className="text-xs text-blue-500 hover:underline">
-                      Live Demo
-                    </Link>
-                  )}
-                </div>
-              )}
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+    <li className="relative ml-10 py-4">
+      <div className="absolute -left-16 top-2 flex items-center justify-center bg-white rounded-full">
+        <Avatar className="border size-12 m-auto">
+          <AvatarImage src={image} alt={title} className="object-contain" />
+          <AvatarFallback>{title?.[0] || ''}</AvatarFallback>
+        </Avatar>
+      </div>
+      <div className="flex flex-1 flex-col justify-start gap-2">
+        <h2 className="font-semibold leading-none">{title}</h2>
+        {typeof description === 'string' ? (
+          <p className="text-sm text-muted-foreground">{description}</p>
+        ) : description ? (
+          <RichText
+            data={description}
+            className="prose dark:prose-invert text-sm text-muted-foreground"
+            enableGutter={false}
+            enableProse={false}
+          />
+        ) : null}
+      </div>
+      {website && (
+        <div className="mt-4 flex flex-row flex-wrap items-start gap-2">
+          <Link href={website}>
+            <Link2 className="w-4 h-4" />
+          </Link>
+        </div>
+      )}
     </li>
   )
 }

@@ -31,6 +31,12 @@ const nextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'media.smoothgrooveconsultancy.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
         hostname: 'images.unsplash.com',
         port: '',
         pathname: '/**',
@@ -49,6 +55,15 @@ const nextConfig = {
   },
   reactStrictMode: true,
   redirects,
+  serverExternalPackages: ['@payloadcms/db-sqlite'],
+  turbopack: {
+    rules: {
+      '*.svg': {
+        loaders: ['@svgr/webpack'],
+        as: '*.js',
+      },
+    },
+  },
 }
 
 export default withPayload(nextConfig, { devBundleServerPackages: false })

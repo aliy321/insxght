@@ -49,8 +49,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html className={cn(workSans.variable, bowlbyOne.variable)} lang="en" suppressHydrationWarning>
       <head>
         <InitTheme />
-        <link href="/favicon.ico" rel="icon" sizes="32x32" />
-        <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
+        <link href={whitelabel.logoIconPath} rel="icon" sizes="32x32" />
+        <link href={whitelabel.logoIconPath} rel="icon" type="image/svg+xml" />
       </head>
       <body
         className={cn('min-h-screen font-sans antialiased relative', workSans.variable)}
@@ -82,7 +82,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             />
           </div>
 
-          <main className="max-w-2xl mx-auto py-12 sm:py-24 px-6 relative overflow-hidden flex flex-col min-h-svh space-y-10 container isolate">
+          <main className="max-w-2xl mx-auto py-12 sm:py-24 px-6 relative flex flex-col min-h-svh space-y-10 container isolate">
             {children}
             <Navbar />
           </main>

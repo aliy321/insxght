@@ -10,9 +10,18 @@ import { Media } from './payload/collections/Media'
 import { Pages } from './payload/collections/Pages'
 import { Posts } from './payload/collections/Posts'
 import { Users } from './payload/collections/Users'
+import { Technologies } from './payload/collections/Technologies'
+import { Projects } from './payload/collections/Projects'
 import { Footer } from './payload/globals/Footer/config'
 import { Header } from './payload/globals/Header/config'
 import { PageSEO } from './payload/globals/PageSEO'
+import { HeroSection } from './payload/globals/HeroSection'
+import { AboutSection } from './payload/globals/AboutSection'
+import { WorkExperience } from './payload/globals/WorkExperience'
+import { Education } from './payload/globals/Education'
+import { Skills } from './payload/globals/Skills'
+import { ProjectsSection } from './payload/globals/ProjectsSection'
+import { ContactSection } from './payload/globals/ContactSection'
 import { RouteSEO } from './payload/collections/RouteSEO'
 import { plugins } from './plugins'
 import { defaultLexical } from '@/components/fields/defaultLexical'
@@ -45,7 +54,7 @@ export default buildConfig({
         {
           type: 'image/svg+xml',
           rel: 'icon',
-          url: whitelabel.logoIconPath || '/favicon.svg',
+          url: whitelabel.logoIconPath,
         },
       ],
       openGraph: {
@@ -98,9 +107,20 @@ export default buildConfig({
     },
   }),
   // database-adapter-config-end
-  collections: [Pages, Posts, RouteSEO, Media, Users, Categories],
+  collections: [Pages, Posts, RouteSEO, Media, Users, Categories, Technologies, Projects],
   cors: [getServerSideURL()].filter(Boolean),
-  globals: [Header, Footer, PageSEO],
+  globals: [
+    Header,
+    Footer,
+    PageSEO,
+    HeroSection,
+    AboutSection,
+    WorkExperience,
+    Education,
+    Skills,
+    ProjectsSection,
+    ContactSection,
+  ],
   plugins: [
     ...plugins,
     // storage-adapter-placeholder

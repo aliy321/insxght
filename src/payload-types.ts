@@ -73,6 +73,8 @@ export interface Config {
     media: Media;
     users: User;
     categories: Category;
+    technologies: Technology;
+    projects: Project;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -90,6 +92,8 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
+    technologies: TechnologiesSelect<false> | TechnologiesSelect<true>;
+    projects: ProjectsSelect<false> | ProjectsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -106,11 +110,25 @@ export interface Config {
     header: Header;
     footer: Footer;
     'page-seo': PageSeo;
+    heroSection: HeroSection;
+    aboutSection: AboutSection;
+    workExperience: WorkExperience;
+    education: Education;
+    skills: Skill;
+    projectsSection: ProjectsSection;
+    contactSection: ContactSection;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
     'page-seo': PageSeoSelect<false> | PageSeoSelect<true>;
+    heroSection: HeroSectionSelect<false> | HeroSectionSelect<true>;
+    aboutSection: AboutSectionSelect<false> | AboutSectionSelect<true>;
+    workExperience: WorkExperienceSelect<false> | WorkExperienceSelect<true>;
+    education: EducationSelect<false> | EducationSelect<true>;
+    skills: SkillsSelect<false> | SkillsSelect<true>;
+    projectsSection: ProjectsSectionSelect<false> | ProjectsSectionSelect<true>;
+    contactSection: ContactSectionSelect<false> | ContactSectionSelect<true>;
   };
   locale: null;
   user: User & {
@@ -158,7 +176,7 @@ export interface Page {
       root: {
         type: string;
         children: {
-          type: any;
+          type: string;
           version: number;
           [k: string]: unknown;
         }[];
@@ -223,7 +241,7 @@ export interface Post {
     root: {
       type: string;
       children: {
-        type: any;
+        type: string;
         version: number;
         [k: string]: unknown;
       }[];
@@ -269,7 +287,7 @@ export interface Media {
     root: {
       type: string;
       children: {
-        type: any;
+        type: string;
         version: number;
         [k: string]: unknown;
       }[];
@@ -388,13 +406,6 @@ export interface User {
   hash?: string | null;
   loginAttempts?: number | null;
   lockUntil?: string | null;
-  sessions?:
-    | {
-        id: string;
-        createdAt?: string | null;
-        expiresAt: string;
-      }[]
-    | null;
   password?: string | null;
 }
 /**
@@ -406,7 +417,7 @@ export interface CallToActionBlock {
     root: {
       type: string;
       children: {
-        type: any;
+        type: string;
         version: number;
         [k: string]: unknown;
       }[];
@@ -457,7 +468,7 @@ export interface ContentBlock {
           root: {
             type: string;
             children: {
-              type: any;
+              type: string;
               version: number;
               [k: string]: unknown;
             }[];
@@ -514,7 +525,7 @@ export interface ArchiveBlock {
     root: {
       type: string;
       children: {
-        type: any;
+        type: string;
         version: number;
         [k: string]: unknown;
       }[];
@@ -550,7 +561,7 @@ export interface FormBlock {
     root: {
       type: string;
       children: {
-        type: any;
+        type: string;
         version: number;
         [k: string]: unknown;
       }[];
@@ -607,7 +618,7 @@ export interface Form {
               root: {
                 type: string;
                 children: {
-                  type: any;
+                  type: string;
                   version: number;
                   [k: string]: unknown;
                 }[];
@@ -690,7 +701,7 @@ export interface Form {
     root: {
       type: string;
       children: {
-        type: any;
+        type: string;
         version: number;
         [k: string]: unknown;
       }[];
@@ -722,7 +733,7 @@ export interface Form {
           root: {
             type: string;
             children: {
-              type: any;
+              type: string;
               version: number;
               [k: string]: unknown;
             }[];
@@ -753,6 +764,43 @@ export interface RouteSeo {
   description?: string | null;
   image?: (number | null) | Media;
   noindex?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "technologies".
+ */
+export interface Technology {
+  id: number;
+  name: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects".
+ */
+export interface Project {
+  id: number;
+  title: string;
+  logo: number | Media;
+  description: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  website?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -952,6 +1000,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'categories';
         value: number | Category;
+      } | null)
+    | ({
+        relationTo: 'technologies';
+        value: number | Technology;
+      } | null)
+    | ({
+        relationTo: 'projects';
+        value: number | Project;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1303,13 +1359,6 @@ export interface UsersSelect<T extends boolean = true> {
   hash?: T;
   loginAttempts?: T;
   lockUntil?: T;
-  sessions?:
-    | T
-    | {
-        id?: T;
-        createdAt?: T;
-        expiresAt?: T;
-      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1328,6 +1377,27 @@ export interface CategoriesSelect<T extends boolean = true> {
         label?: T;
         id?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "technologies_select".
+ */
+export interface TechnologiesSelect<T extends boolean = true> {
+  name?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects_select".
+ */
+export interface ProjectsSelect<T extends boolean = true> {
+  title?: T;
+  logo?: T;
+  description?: T;
+  website?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1695,6 +1765,292 @@ export interface PageSeo {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "heroSection".
+ */
+export interface HeroSection {
+  id: number;
+  /**
+   * Your full name displayed in the hero section
+   */
+  name: string;
+  /**
+   * Initials used as fallback for avatar (e.g., JD for John Doe)
+   */
+  initials: string;
+  /**
+   * Your profile picture displayed in the hero section
+   */
+  avatar: number | Media;
+  /**
+   * Brief description of yourself and your expertise
+   */
+  description: string;
+  /**
+   * Greeting text before your name (e.g., "Hi, I'm" or "Hello, I'm")
+   */
+  greeting?: string | null;
+  /**
+   * Emoji displayed after your name
+   */
+  emoji?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "aboutSection".
+ */
+export interface AboutSection {
+  id: number;
+  /**
+   * Title for the about section
+   */
+  title?: string | null;
+  /**
+   * Detailed description about yourself, your background, and interests
+   */
+  summary: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "workExperience".
+ */
+export interface WorkExperience {
+  id: number;
+  /**
+   * Title for the work experience section
+   */
+  title?: string | null;
+  workEntries?:
+    | {
+        company: string;
+        title: string;
+        /**
+         * Start date (e.g., "2022" or "Jan 2022")
+         */
+        start: string;
+        /**
+         * End date (e.g., "Present", "2024", or "Dec 2024")
+         */
+        end?: string | null;
+        description: {
+          root: {
+            type: string;
+            children: {
+              type: string;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        /**
+         * Company logo image
+         */
+        logo?: (number | null) | Media;
+        /**
+         * Company website URL
+         */
+        website?: string | null;
+        /**
+         * Select technologies and skills used in this role
+         */
+        technologies?: (number | Technology)[] | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "education".
+ */
+export interface Education {
+  id: number;
+  /**
+   * Title for the education section
+   */
+  title?: string | null;
+  educationEntries?:
+    | {
+        school: string;
+        /**
+         * e.g., "Bachelor of Science in Computer Science"
+         */
+        degree: string;
+        /**
+         * Start date (e.g., "2018" or "Sep 2018")
+         */
+        start: string;
+        /**
+         * End date (e.g., "2022" or "May 2022")
+         */
+        end: string;
+        /**
+         * School or university logo
+         */
+        logo?: (number | null) | Media;
+        /**
+         * School or university website URL
+         */
+        website?: string | null;
+        /**
+         * Additional information about your education (optional)
+         */
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "skills".
+ */
+export interface Skill {
+  id: number;
+  /**
+   * Title for the skills section
+   */
+  title?: string | null;
+  /**
+   * Select technologies to display on the homepage
+   */
+  featuredTechnologies?: (number | Technology)[] | null;
+  /**
+   * Display skills as individual badges instead of categorized groups
+   */
+  displayAsBadges?: boolean | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projectsSection".
+ */
+export interface ProjectsSection {
+  id: number;
+  /**
+   * Main title for the projects section
+   */
+  title?: string | null;
+  /**
+   * Subtitle displayed below the main title
+   */
+  subtitle?: string | null;
+  /**
+   * Description text for the projects section
+   */
+  description?: string | null;
+  /**
+   * Text displayed in the small badge above the title
+   */
+  badgeText?: string | null;
+  /**
+   * Select projects to feature on the homepage
+   */
+  featuredProjects?: (number | Project)[] | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contactSection".
+ */
+export interface ContactSection {
+  id: number;
+  /**
+   * Main title for the contact section
+   */
+  title?: string | null;
+  /**
+   * Description text with contact instructions and social links
+   */
+  description: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  /**
+   * Text displayed in the small badge above the title
+   */
+  badgeText?: string | null;
+  socialLinks?:
+    | {
+        /**
+         * e.g., "Twitter", "LinkedIn", "GitHub"
+         */
+        platform: string;
+        url: string;
+        /**
+         * e.g., "@username" or "username"
+         */
+        username?: string | null;
+        /**
+         * Mark as the main contact method (e.g., for "shoot me a dm" text)
+         */
+        isPrimary?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  email?: {
+    /**
+     * Your contact email address
+     */
+    address?: string | null;
+    showEmail?: boolean | null;
+  };
+  callToAction?: {
+    /**
+     * Main call-to-action text
+     */
+    text?: string | null;
+    /**
+     * Text for the clickable link
+     */
+    linkText?: string | null;
+    /**
+     * Additional text after the link
+     */
+    disclaimer?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
@@ -1785,6 +2141,137 @@ export interface PageSeoSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "heroSection_select".
+ */
+export interface HeroSectionSelect<T extends boolean = true> {
+  name?: T;
+  initials?: T;
+  avatar?: T;
+  description?: T;
+  greeting?: T;
+  emoji?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "aboutSection_select".
+ */
+export interface AboutSectionSelect<T extends boolean = true> {
+  title?: T;
+  summary?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "workExperience_select".
+ */
+export interface WorkExperienceSelect<T extends boolean = true> {
+  title?: T;
+  workEntries?:
+    | T
+    | {
+        company?: T;
+        title?: T;
+        start?: T;
+        end?: T;
+        description?: T;
+        logo?: T;
+        website?: T;
+        technologies?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "education_select".
+ */
+export interface EducationSelect<T extends boolean = true> {
+  title?: T;
+  educationEntries?:
+    | T
+    | {
+        school?: T;
+        degree?: T;
+        start?: T;
+        end?: T;
+        logo?: T;
+        website?: T;
+        description?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "skills_select".
+ */
+export interface SkillsSelect<T extends boolean = true> {
+  title?: T;
+  featuredTechnologies?: T;
+  displayAsBadges?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projectsSection_select".
+ */
+export interface ProjectsSectionSelect<T extends boolean = true> {
+  title?: T;
+  subtitle?: T;
+  description?: T;
+  badgeText?: T;
+  featuredProjects?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contactSection_select".
+ */
+export interface ContactSectionSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  badgeText?: T;
+  socialLinks?:
+    | T
+    | {
+        platform?: T;
+        url?: T;
+        username?: T;
+        isPrimary?: T;
+        id?: T;
+      };
+  email?:
+    | T
+    | {
+        address?: T;
+        showEmail?: T;
+      };
+  callToAction?:
+    | T
+    | {
+        text?: T;
+        linkText?: T;
+        disclaimer?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "TaskSchedulePublish".
  */
 export interface TaskSchedulePublish {
@@ -1815,7 +2302,7 @@ export interface BannerBlock {
     root: {
       type: string;
       children: {
-        type: any;
+        type: string;
         version: number;
         [k: string]: unknown;
       }[];

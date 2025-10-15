@@ -72,9 +72,7 @@ export const getPageSEO = async (pageKey: PageSEOKey): Promise<Metadata> => {
     const ogImage = getImageURL(routeOverride?.image || (pageData as any)?.image)
     const title = routeOverride?.title || (pageData as any)?.title || whitelabel.brandName
     const description =
-      routeOverride?.description ||
-      (pageData as any)?.description ||
-      'Where the spirit of the Renaissance meets modern innovation. We craft digital solutions with the precision of master artisans and the vision of true pioneers.'
+      routeOverride?.description || (pageData as any)?.description || whitelabel.brandDescription
 
     return {
       title: pageKey === 'home' ? { absolute: title } : title,
@@ -138,8 +136,7 @@ export const getPageSEO = async (pageKey: PageSEOKey): Promise<Metadata> => {
     // Fallback to default metadata if there's an error
     return {
       title: pageKey === 'home' ? { absolute: whitelabel.brandName } : whitelabel.brandName,
-      description:
-        'Where the spirit of the Renaissance meets modern innovation. We craft digital solutions with the precision of master artisans and the vision of true pioneers.',
+      description: whitelabel.brandDescription,
       keywords: [
         'digital innovation',
         'startup development',

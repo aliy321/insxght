@@ -19,7 +19,7 @@ export const revalidateProject: CollectionAfterChangeHook<Project> = ({
       revalidatePath('/projects') // Revalidate projects listing page
       revalidatePath('/') // Revalidate homepage (has featured projects)
       revalidateTag('projects-sitemap')
-      revalidateTag('global_homepage') // Revalidate homepage global
+      revalidateTag('projectsSection') // Revalidate homepage global
     }
 
     // If the project was previously published, we need to revalidate the old path
@@ -32,7 +32,7 @@ export const revalidateProject: CollectionAfterChangeHook<Project> = ({
       revalidatePath('/projects') // Revalidate projects listing page
       revalidatePath('/') // Revalidate homepage (has featured projects)
       revalidateTag('projects-sitemap')
-      revalidateTag('global_homepage') // Revalidate homepage global
+      revalidateTag('projectsSection') // Revalidate homepage global
     }
 
     // Also revalidate when a project is unpublished or changed
@@ -40,7 +40,7 @@ export const revalidateProject: CollectionAfterChangeHook<Project> = ({
       revalidatePath('/projects') // Revalidate projects listing page
       revalidatePath('/') // Revalidate homepage (has featured projects)
       revalidateTag('projects-sitemap')
-      revalidateTag('global_homepage') // Revalidate homepage global
+      revalidateTag('projectsSection') // Revalidate homepage global
     }
   }
   return doc

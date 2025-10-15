@@ -16,5 +16,13 @@ export const getImageURL = (image?: any) => {
 
   // Prefer OG-specific size if available, otherwise use main URL
   const ogUrl = image.sizes?.og?.url
-  return ogUrl ? serverUrl + ogUrl : serverUrl + image.url
+  const imageUrl = ogUrl && ogUrl !== 'null' ? ogUrl : image.url
+
+  // If URL is already absolute, return as-is
+  if (imageUrl && imageUrl.startsWith('http')) {
+    return imageUrl
+  }
+
+  // Otherwise, add server URL prefix
+  return serverUrl + imageUrl
 }

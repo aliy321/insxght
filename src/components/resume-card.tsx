@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { Card, CardContent } from '@/components/ui/card'
+import RichText from './RichText'
 
 interface ResumeCardProps {
   logoUrl?: string
@@ -10,7 +11,7 @@ interface ResumeCardProps {
   href?: string
   badges?: string[]
   period: string
-  description?: string
+  description?: any
 }
 
 export function ResumeCard({
@@ -29,22 +30,46 @@ export function ResumeCard({
         <div className="flex items-start gap-3">
           {logoUrl && (
             <div className="flex-shrink-0">
-              <Image
-                src={logoUrl}
-                alt={altText || title}
-                width={40}
-                height={40}
-                className="rounded-md"
-              />
+              {href && (
+                <Link href={href}>
+                  <Image
+                    src={logoUrl}
+                    alt={altText || title}
+                    width={40}
+                    height={40}
+                    className="rounded-md"
+                  />
+                </Link>
+              )}
+              {!href && (
+                <Image
+                  src={logoUrl}
+                  alt={altText || title}
+                  width={40}
+                  height={40}
+                  className="rounded-md"
+                />
+              )}
             </div>
           )}
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center justify-between">
-              <h3 className="font-semibold text-sm">{title}</h3>
-              <span className="text-xs text-muted-foreground">{period}</span>
+          <div className="flex-1 min-w-0 space-y-6">
+            <div>
+              <div className="flex items-center justify-between">
+                <h3 className="font-semibold text-sm">{title}</h3>
+                <span className="text-xs text-muted-foreground">{period}</span>
+              </div>
+              <p className="text-sm text-muted-foreground mt-1">{subtitle}</p>
             </div>
-            <p className="text-sm text-muted-foreground mt-1">{subtitle}</p>
-            {description && <p className="text-sm mt-2 text-muted-foreground">{description}</p>}
+
+            {description && (
+              <RichText
+                data={description}
+                className="prose dark:prose-invert text-sm text-muted-accent"
+                enableGutter={false}
+                enableProse={false}
+              />
+            )}
+
             {badges.length > 0 && (
               <div className="flex flex-wrap gap-1 mt-2">
                 {badges.map((badge) => (
@@ -63,9 +88,9 @@ export function ResumeCard({
     </Card>
   )
 
-  if (href) {
-    return <Link href={href}>{content}</Link>
-  }
+  // if (href) {
+  //   return <Link href={href}>{content}</Link>
+  // }
 
   return content
 }

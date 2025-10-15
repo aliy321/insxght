@@ -107,7 +107,7 @@ export const plugins: Plugin[] = [
       media: {
         prefix: process.env.S3_ROOT ? `${process.env.S3_ROOT}/` : '',
         generateFileURL: ({ filename, prefix }) => {
-          const customDomain = process.env.S3_CUSTOM_DOMAIN || 'media.smoothgrooveconsultancy.com'
+          const customDomain = process.env.S3_CUSTOM_DOMAIN || 'media.hyperfuse.studio'
 
           if (!customDomain) {
             // Fallback to S3 URL if custom domain is not configured

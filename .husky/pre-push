@@ -1,0 +1,7 @@
+echo "🔍 Running pre-push checks..."
+
+# Run TypeScript check
+echo "📝 Running TypeScript check..."
+pnpm tsc --noEmit
+
+echo "✅ Pre-push checks passed!" 

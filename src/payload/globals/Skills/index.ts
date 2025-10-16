@@ -28,24 +28,36 @@ export const Skills: GlobalConfig = {
       },
     },
     {
-      name: 'featuredTechnologies',
-      type: 'relationship',
-      label: 'Featured Technologies',
-      relationTo: 'technologies',
-      hasMany: true,
+      name: 'skillGroups',
+      type: 'array',
+      label: 'Skill Groups',
       admin: {
-        description: 'Select technologies to display on the homepage',
-        sortOptions: 'name',
+        description: 'Organize skills into categories with headers',
+        initCollapsed: false,
       },
-    },
-    {
-      name: 'displayAsBadges',
-      type: 'checkbox',
-      label: 'Display as Badges',
-      defaultValue: true,
-      admin: {
-        description: 'Display skills as individual badges instead of categorized groups',
-      },
+      fields: [
+        {
+          name: 'header',
+          type: 'text',
+          label: 'Group Header',
+          required: true,
+          admin: {
+            description: 'e.g., "Frontend & UI", "Backend & APIs"',
+          },
+        },
+        {
+          name: 'technologies',
+          type: 'relationship',
+          label: 'Technologies',
+          relationTo: 'technologies',
+          hasMany: true,
+          required: true,
+          admin: {
+            description: 'Select technologies for this group',
+            sortOptions: 'name',
+          },
+        },
+      ],
     },
   ],
   hooks: {

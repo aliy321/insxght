@@ -162,15 +162,24 @@ export default async function Home() {
           <BlurFade delay={BLUR_FADE_DELAY * 9}>
             <h2 className="text-xl font-bold">{skillsData?.title || 'Skills'}</h2>
           </BlurFade>
-          <div className="flex flex-wrap gap-1">
-            {skillsData?.featuredTechnologies?.map((tech, id) => (
-              <BlurFade
-                key={typeof tech === 'object' ? tech.name : tech}
-                delay={BLUR_FADE_DELAY * 10 + id * 0.05}
-              >
-                <Badge key={typeof tech === 'object' ? tech.name : tech}>
-                  {typeof tech === 'object' ? tech.name : tech}
-                </Badge>
+          <div className="space-y-4">
+            {skillsData?.skillGroups?.map((group, groupId) => (
+              <BlurFade key={group.header || groupId} delay={BLUR_FADE_DELAY * 10 + groupId * 0.1}>
+                <div className="space-y-2">
+                  <h3 className="text-sm font-semibold text-muted-foreground">{group.header}</h3>
+                  <div className="flex flex-wrap gap-1">
+                    {group.technologies?.map((tech, techId) => (
+                      <BlurFade
+                        key={typeof tech === 'object' ? tech.id : techId}
+                        delay={BLUR_FADE_DELAY * 11 + groupId * 0.1 + techId * 0.02}
+                      >
+                        <Badge variant="secondary" className="text-xs">
+                          {typeof tech === 'object' ? tech.name : tech}
+                        </Badge>
+                      </BlurFade>
+                    ))}
+                  </div>
+                </div>
               </BlurFade>
             ))}
           </div>

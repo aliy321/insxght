@@ -1997,13 +1997,21 @@ export interface Skill {
    */
   title?: string | null;
   /**
-   * Select technologies to display on the homepage
+   * Organize skills into categories with headers
    */
-  featuredTechnologies?: (number | Technology)[] | null;
-  /**
-   * Display skills as individual badges instead of categorized groups
-   */
-  displayAsBadges?: boolean | null;
+  skillGroups?:
+    | {
+        /**
+         * e.g., "Frontend & UI", "Backend & APIs"
+         */
+        header: string;
+        /**
+         * Select technologies for this group
+         */
+        technologies: (number | Technology)[];
+        id?: string | null;
+      }[]
+    | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -2306,8 +2314,13 @@ export interface EducationSelect<T extends boolean = true> {
  */
 export interface SkillsSelect<T extends boolean = true> {
   title?: T;
-  featuredTechnologies?: T;
-  displayAsBadges?: T;
+  skillGroups?:
+    | T
+    | {
+        header?: T;
+        technologies?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

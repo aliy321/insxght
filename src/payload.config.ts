@@ -12,6 +12,7 @@ import { Posts } from './payload/collections/Posts'
 import { Users } from './payload/collections/Users'
 import { Technologies } from './payload/collections/Technologies'
 import { Projects } from './payload/collections/Projects'
+import { SideProjects } from './payload/collections/SideProjects'
 import { Footer } from './payload/globals/Footer/config'
 import { Header } from './payload/globals/Header/config'
 import { PageSEO } from './payload/globals/PageSEO'
@@ -21,6 +22,7 @@ import { WorkExperience } from './payload/globals/WorkExperience'
 import { Education } from './payload/globals/Education'
 import { Skills } from './payload/globals/Skills'
 import { ProjectsSection } from './payload/globals/ProjectsSection'
+import { SideProjectsSection } from './payload/globals/SideProjectsSection'
 import { ContactSection } from './payload/globals/ContactSection'
 import { RouteSEO } from './payload/collections/RouteSEO'
 import { plugins } from './plugins'
@@ -107,7 +109,17 @@ export default buildConfig({
     },
   }),
   // database-adapter-config-end
-  collections: [Pages, Posts, RouteSEO, Media, Users, Categories, Technologies, Projects],
+  collections: [
+    Pages,
+    Posts,
+    RouteSEO,
+    Media,
+    Users,
+    Categories,
+    Technologies,
+    Projects,
+    SideProjects,
+  ],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [
     Header,
@@ -119,6 +131,7 @@ export default buildConfig({
     Education,
     Skills,
     ProjectsSection,
+    SideProjectsSection,
     ContactSection,
   ],
   plugins: [

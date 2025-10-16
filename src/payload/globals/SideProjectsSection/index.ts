@@ -1,16 +1,16 @@
 import { revalidateTag } from 'next/cache'
 import type { GlobalAfterChangeHook, GlobalConfig } from 'payload'
 
-const revalidateProjectsSection: GlobalAfterChangeHook = ({ doc, req: { context } }) => {
+const revalidateSideProjectsSection: GlobalAfterChangeHook = ({ doc, req: { context } }) => {
   if (!context.disableRevalidate) {
-    revalidateTag('global_projectsSection')
+    revalidateTag('global_sideProjectsSection')
   }
   return doc
 }
 
-export const ProjectsSection: GlobalConfig = {
-  slug: 'projectsSection',
-  label: 'Projects Section',
+export const SideProjectsSection: GlobalConfig = {
+  slug: 'sideProjectsSection',
+  label: 'Side Projects Section',
   admin: {
     group: 'Homepage Sections',
   },
@@ -22,16 +22,16 @@ export const ProjectsSection: GlobalConfig = {
       name: 'title',
       type: 'text',
       label: 'Section Title',
-      defaultValue: 'Client Work',
+      defaultValue: 'Side Projects',
       admin: {
-        description: 'Main title for the projects section',
+        description: 'Main title for the side projects section',
       },
     },
     {
       name: 'subtitle',
       type: 'text',
       label: 'Subtitle',
-      defaultValue: 'Professional projects and client work',
+      defaultValue: 'Personal projects and experiments',
       admin: {
         description: 'Subtitle displayed below the main title',
       },
@@ -41,32 +41,32 @@ export const ProjectsSection: GlobalConfig = {
       type: 'textarea',
       label: 'Section Description',
       defaultValue:
-        "I've worked with various clients on professional projects, from simple websites to complex web applications. Here are some highlights of my client work.",
+        "Here are some personal projects and experiments I've worked on in my spare time.",
       admin: {
-        description: 'Description text for the projects section',
+        description: 'Description text for the side projects section',
       },
     },
     {
       name: 'badgeText',
       type: 'text',
       label: 'Badge Text',
-      defaultValue: 'Client Work',
+      defaultValue: 'Side Projects',
       admin: {
         description: 'Text displayed in the small badge above the title',
       },
     },
     {
-      name: 'featuredProjects',
+      name: 'featuredSideProjects',
       type: 'relationship',
-      label: 'Featured Projects',
-      relationTo: 'projects',
+      label: 'Featured Side Projects',
+      relationTo: 'sideProjects',
       hasMany: true,
       admin: {
-        description: 'Select projects to feature on the homepage',
+        description: 'Select side projects to feature on the homepage',
       },
     },
   ],
   hooks: {
-    afterChange: [revalidateProjectsSection],
+    afterChange: [revalidateSideProjectsSection],
   },
 }

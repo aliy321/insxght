@@ -1,21 +1,14 @@
-import { getPayload } from 'payload'
-import configPromise from '@payload-config'
 import { Metadata } from 'next'
-import Link from 'next/link'
-import Image from 'next/image'
 import BlurFade from '@/components/magicui/blur-fade'
 import BlurFadeText from '@/components/magicui/blur-fade-text'
-import { ProjectCard } from '@/components/project-card'
 import { ResumeCard } from '@/components/resume-card'
 import { HackathonCard } from '@/components/hackathon-card'
 import { GitHubContributions } from '@/components/github-contributions'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import RichText from '@/components/RichText'
-import { Media } from '@/payload-types'
 import { getCachedGlobal } from '@/utilities/getGlobals'
 import { whitelabel } from '@/config/whitelabel'
-import { Separator } from '@/components/ui/separator'
 
 const BLUR_FADE_DELAY = 0.04
 
@@ -27,6 +20,7 @@ export default async function Home() {
     educationData,
     skillsData,
     projectsData,
+    sideProjectsData,
     // contactData,
   ] = await Promise.all([
     getCachedGlobal('heroSection', 1)(),
@@ -35,6 +29,7 @@ export default async function Home() {
     getCachedGlobal('education', 1)(),
     getCachedGlobal('skills', 1)(),
     getCachedGlobal('projectsSection', 2)(),
+    getCachedGlobal('sideProjectsSection', 2)(),
     // getCachedGlobal('contactSection', 1)(),
   ])
 
@@ -200,27 +195,94 @@ export default async function Home() {
             </div>
           </BlurFade>
           <BlurFade delay={BLUR_FADE_DELAY * 15}>
-            <ul className="mb-4 ml-4 divide-y divide-dashed border-l">
-              {projectsData?.featuredProjects?.map((project, id) => (
-                <BlurFade
-                  key={typeof project === 'object' ? project.id : id}
-                  delay={BLUR_FADE_DELAY * 16 + id * 0.05}
-                >
-                  {typeof project === 'object' && (
-                    <HackathonCard
-                      title={project.title}
-                      description={project.description}
-                      image={
-                        project.logo && typeof project.logo === 'object'
-                          ? (project.logo.url ?? undefined)
-                          : undefined
-                      }
-                      website={project.website ?? undefined}
-                    />
-                  )}
-                </BlurFade>
-              ))}
-            </ul>
+            {projectsData?.featuredProjects && projectsData.featuredProjects.length > 0 ? (
+              <ul className="mb-4 ml-4 divide-y divide-dashed border-l">
+                {projectsData.featuredProjects.map((project, id) => (
+                  <BlurFade
+                    key={typeof project === 'object' ? project.id : id}
+                    delay={BLUR_FADE_DELAY * 16 + id * 0.05}
+                  >
+                    {typeof project === 'object' && (
+                      <HackathonCard
+                        title={project.title}
+                        description={project.description}
+                        image={
+                          project.logo && typeof project.logo === 'object'
+                            ? (project.logo.url ?? undefined)
+                            : undefined
+                        }
+                        website={project.website ?? undefined}
+                      />
+                    )}
+                  </BlurFade>
+                ))}
+              </ul>
+            ) : (
+              <div className="flex flex-col items-center justify-center text-center">
+                <div className="space-y-2">
+                  <div className="text-6xl">🚧</div>
+                  <h3 className="text-xl font-semibold">Work in Progress</h3>
+                  <p className="text-muted-foreground">More client projects coming soon!</p>
+                </div>
+              </div>
+            )}
+          </BlurFade>
+        </div>
+      </section>
+
+      <section id="side-projects">
+        <div className="space-y-12 w-full py-12">
+          <BlurFade delay={BLUR_FADE_DELAY * 17}>
+            <div className="flex flex-col items-center justify-center space-y-4 text-center">
+              <div className="space-y-2">
+                <div className="inline-block rounded-lg bg-foreground text-background px-3 py-1 text-sm">
+                  {sideProjectsData?.badgeText || 'Side Projects'}
+                </div>
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
+                  {sideProjectsData?.title || 'Side Projects'}
+                </h2>
+                <p className="text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                  {sideProjectsData?.description ||
+                    'Personal projects and experiments I work on in my spare time.'}
+                </p>
+              </div>
+            </div>
+          </BlurFade>
+          <BlurFade delay={BLUR_FADE_DELAY * 18}>
+            {sideProjectsData?.featuredSideProjects &&
+            sideProjectsData.featuredSideProjects.length > 0 ? (
+              <ul className="mb-4 ml-4 divide-y divide-dashed border-l">
+                {sideProjectsData.featuredSideProjects.map((project, id) => (
+                  <BlurFade
+                    key={typeof project === 'object' ? project.id : id}
+                    delay={BLUR_FADE_DELAY * 19 + id * 0.05}
+                  >
+                    {typeof project === 'object' && (
+                      <HackathonCard
+                        title={project.title}
+                        description={project.description}
+                        image={
+                          project.logo && typeof project.logo === 'object'
+                            ? (project.logo.url ?? undefined)
+                            : undefined
+                        }
+                        website={project.website ?? undefined}
+                      />
+                    )}
+                  </BlurFade>
+                ))}
+              </ul>
+            ) : (
+              <div className="flex flex-col items-center justify-center text-center">
+                <div className="space-y-2">
+                  <div className="text-6xl">⚡</div>
+                  <h3 className="text-xl font-semibold">Coming Soon</h3>
+                  <p className="text-muted-foreground">
+                    Exciting side projects are in development!
+                  </p>
+                </div>
+              </div>
+            )}
           </BlurFade>
         </div>
       </section>

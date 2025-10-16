@@ -75,6 +75,7 @@ export interface Config {
     categories: Category;
     technologies: Technology;
     projects: Project;
+    sideProjects: SideProject;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -94,6 +95,7 @@ export interface Config {
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     technologies: TechnologiesSelect<false> | TechnologiesSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
+    sideProjects: SideProjectsSelect<false> | SideProjectsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -116,6 +118,7 @@ export interface Config {
     education: Education;
     skills: Skill;
     projectsSection: ProjectsSection;
+    sideProjectsSection: SideProjectsSection;
     contactSection: ContactSection;
   };
   globalsSelect: {
@@ -128,6 +131,7 @@ export interface Config {
     education: EducationSelect<false> | EducationSelect<true>;
     skills: SkillsSelect<false> | SkillsSelect<true>;
     projectsSection: ProjectsSectionSelect<false> | ProjectsSectionSelect<true>;
+    sideProjectsSection: SideProjectsSectionSelect<false> | SideProjectsSectionSelect<true>;
     contactSection: ContactSectionSelect<false> | ContactSectionSelect<true>;
   };
   locale: null;
@@ -806,6 +810,40 @@ export interface Project {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "sideProjects".
+ */
+export interface SideProject {
+  id: number;
+  title: string;
+  logo: number | Media;
+  description: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  website?: string | null;
+  github?: string | null;
+  technologies?:
+    | {
+        name: string;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -1008,6 +1046,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'projects';
         value: number | Project;
+      } | null)
+    | ({
+        relationTo: 'sideProjects';
+        value: number | SideProject;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1398,6 +1440,25 @@ export interface ProjectsSelect<T extends boolean = true> {
   logo?: T;
   description?: T;
   website?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "sideProjects_select".
+ */
+export interface SideProjectsSelect<T extends boolean = true> {
+  title?: T;
+  logo?: T;
+  description?: T;
+  website?: T;
+  github?: T;
+  technologies?:
+    | T
+    | {
+        name?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1977,6 +2038,35 @@ export interface ProjectsSection {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "sideProjectsSection".
+ */
+export interface SideProjectsSection {
+  id: number;
+  /**
+   * Main title for the side projects section
+   */
+  title?: string | null;
+  /**
+   * Subtitle displayed below the main title
+   */
+  subtitle?: string | null;
+  /**
+   * Description text for the side projects section
+   */
+  description?: string | null;
+  /**
+   * Text displayed in the small badge above the title
+   */
+  badgeText?: string | null;
+  /**
+   * Select side projects to feature on the homepage
+   */
+  featuredSideProjects?: (number | SideProject)[] | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "contactSection".
  */
 export interface ContactSection {
@@ -2232,6 +2322,20 @@ export interface ProjectsSectionSelect<T extends boolean = true> {
   description?: T;
   badgeText?: T;
   featuredProjects?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "sideProjectsSection_select".
+ */
+export interface SideProjectsSectionSelect<T extends boolean = true> {
+  title?: T;
+  subtitle?: T;
+  description?: T;
+  badgeText?: T;
+  featuredSideProjects?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

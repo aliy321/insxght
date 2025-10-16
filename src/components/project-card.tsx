@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { getExternalLinkProps } from '@/utilities/isExternalUrl'
 
 interface ProjectCardProps {
   title: string
@@ -60,12 +61,20 @@ export function ProjectCard({
           {links && (
             <div className="flex gap-2">
               {links.github && (
-                <Link href={links.github} className="text-xs text-blue-500 hover:underline">
+                <Link
+                  href={links.github}
+                  className="text-xs text-blue-500 hover:underline"
+                  {...getExternalLinkProps(links.github)}
+                >
                   GitHub
                 </Link>
               )}
               {links.live && (
-                <Link href={links.live} className="text-xs text-blue-500 hover:underline">
+                <Link
+                  href={links.live}
+                  className="text-xs text-blue-500 hover:underline"
+                  {...getExternalLinkProps(links.live)}
+                >
                   Live Demo
                 </Link>
               )}

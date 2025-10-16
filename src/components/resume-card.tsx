@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Card, CardContent } from '@/components/ui/card'
 import RichText from './RichText'
+import { getExternalLinkProps } from '@/utilities/isExternalUrl'
 
 interface ResumeCardProps {
   logoUrl?: string
@@ -31,7 +32,7 @@ export function ResumeCard({
           {logoUrl && (
             <div className="flex-shrink-0">
               {href && (
-                <Link href={href}>
+                <Link href={href} {...getExternalLinkProps(href)}>
                   <Image
                     src={logoUrl}
                     alt={altText || title}

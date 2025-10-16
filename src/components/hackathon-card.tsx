@@ -1,10 +1,9 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
-import Image from 'next/image'
 import RichText from '@/components/RichText'
 import type { DefaultTypedEditorState } from '@payloadcms/richtext-lexical'
 import { Link2 } from 'lucide-react'
+import { getExternalLinkProps } from '@/utilities/isExternalUrl'
 
 interface Props {
   title?: string
@@ -37,7 +36,7 @@ export function HackathonCard({ title, description, image, website }: Props) {
       </div>
       {website && (
         <div className="mt-4 flex flex-row flex-wrap items-start gap-2">
-          <Link href={website}>
+          <Link href={website} {...getExternalLinkProps(website)}>
             <Link2 className="w-4 h-4" />
           </Link>
         </div>

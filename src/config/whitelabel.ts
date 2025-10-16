@@ -1,22 +1,25 @@
 import { Icons } from '@/components/icons'
-import { HomeIcon, NotebookIcon } from 'lucide-react'
+import { HomeIcon } from 'lucide-react'
 
 export const whitelabel = {
-  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
+  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || 'https://insxght.vercel.app',
   brandName: 'INSXGHT',
-  brandDescription: 'Your brand description goes here.',
-  brandEmail: 'contact@yourbrand.com',
+  brandDescription:
+    'Creative Front-End Engineer & Technologist crafting expressive, performant web experiences using React, Next.js, and TailwindCSS.',
+  brandEmail: 'aliyakhbar@gmail.com',
   twitter: {
     card: 'summary_large_image',
-    title: 'INSXGHT',
-    description: 'Your brand description for Twitter cards.',
-    creator: '@yourbrand',
+    title: 'Aliy — Front-End Engineer & Creative Technologist',
+    description:
+      'Building clear, responsive, and maintainable digital experiences with React, Next.js, and TailwindCSS. Explore my latest works.',
+    creator: '@cmd_fuck',
   },
-  twitterHandle: '@yourbrand',
+  twitterHandle: '@cmd_fuck',
   openGraph: {
     type: 'website',
-    title: 'INSXGHT',
-    description: 'Your brand description for Open Graph.',
+    title: 'Aliy — Front-End Engineer & Creative Technologist',
+    description:
+      'Creative Front-End Developer & Entrepreneur focused on building expressive, high-performance web experiences with React, Next.js, and TailwindCSS.',
     images: '/whitelabel/og-default.webp',
   },
   defaultOgImage: '/whitelabel/og-default.webp',
@@ -26,16 +29,13 @@ export const whitelabel = {
     icon: '/payload/graphics/Icon/index.tsx#Icon',
     logo: '/payload/graphics/Logo/index.tsx#Logo',
   },
-  // Structured Data Configuration
   structuredData: {
-    addressCountry: 'US',
-    contactType: ['customer service', 'sales'], // Array of contact types: 'customer service', 'technical support', 'sales', 'billing', 'general'
+    addressCountry: 'SG',
+    contactType: ['customer service', 'sales'],
     socialMedia: {
-      twitter: 'https://twitter.com/yourbrand',
-      // Add other social media URLs as needed
-      // linkedin: 'https://linkedin.com/company/your-brand',
-      // facebook: 'https://facebook.com/your-brand',
-      // instagram: 'https://instagram.com/your-brand',
+      twitter: 'https://x.com/cmd_fuck',
+      linkedin: 'https://www.linkedin.com/in/aliy-akhbar-4a1a60187/',
+      github: 'https://github.com/aliy321',
     },
   },
   socialMedia: {
@@ -64,10 +64,5 @@ export const whitelabel = {
       navbar: false,
     },
   },
-  navbar: [
-    { href: '/', icon: HomeIcon, label: 'Home' },
-    // { href: '/blog', icon: NotebookIcon, label: 'Blog' },
-  ],
+  navbar: [{ href: '/', icon: HomeIcon, label: 'Home' }],
 } as const
-
-export type WhitelabelConfig = typeof whitelabel

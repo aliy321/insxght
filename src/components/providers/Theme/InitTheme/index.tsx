@@ -1,10 +1,7 @@
 import Script from 'next/script'
 import React from 'react'
 
-import {
-  defaultTheme,
-  themeLocalStorageKey,
-} from '@/components/providers/Theme/ThemeSelector/types'
+import { defaultTheme, themeLocalStorageKey } from '@/components/providers/Theme/shared'
 
 export const InitTheme: React.FC = () => {
   return (
@@ -13,21 +10,20 @@ export const InitTheme: React.FC = () => {
       dangerouslySetInnerHTML={{
         __html: `
   (function () {
-    // Commented out auto mode functionality
-    // function getImplicitPreference() {
-    //   var mediaQuery = '(prefers-color-scheme: dark)'
-    //   var mql = window.matchMedia(mediaQuery)
-    //   var hasImplicitPreference = typeof mql.matches === 'boolean'
+    function getImplicitPreference() {
+      var mediaQuery = '(prefers-color-scheme: dark)'
+      var mql = window.matchMedia(mediaQuery)
+      var hasImplicitPreference = typeof mql.matches === 'boolean'
 
-    //   if (hasImplicitPreference) {
-    //     return mql.matches ? 'dark' : 'light'
-    //   }
+      if (hasImplicitPreference) {
+        return mql.matches ? 'dark' : 'light'
+      }
 
-    //   return null
-    // }
+      return null
+    }
 
     function themeIsValid(theme) {
-      return theme === 'light' || theme === 'dark'
+      return theme === 'light' || theme === 'dark' || theme === 'system'
     }
 
     var themeToSet = '${defaultTheme}'
@@ -35,16 +31,21 @@ export const InitTheme: React.FC = () => {
 
     if (themeIsValid(preference)) {
       themeToSet = preference
+    } else {
+      var implicitPreference = getImplicitPreference()
+      if (implicitPreference) {
+        themeToSet = implicitPreference
+      }
     }
-    // Commented out auto mode - always default to light
-    // else {
-    //   var implicitPreference = getImplicitPreference()
-    //   if (implicitPreference) {
-    //     themeToSet = implicitPreference
-    //   }
-    // }
 
-    document.documentElement.setAttribute('data-theme', themeToSet)
+    // If theme is 'system', apply the system preference
+    if (themeToSet === 'system') {
+      var implicitPreference = getImplicitPreference()
+      var finalTheme = implicitPreference || 'light'
+      document.documentElement.setAttribute('data-theme', finalTheme)
+    } else {
+      document.documentElement.setAttribute('data-theme', themeToSet)
+    }
   })();
   `,
       }}

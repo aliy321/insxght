@@ -5,8 +5,7 @@ import React, { createContext, useCallback, use, useEffect, useState } from 'rea
 import type { Theme, ThemeContextType } from './types'
 
 import canUseDOM from '@/utilities/canUseDOM'
-import { defaultTheme, themeLocalStorageKey } from './shared'
-// import { getImplicitPreference } from './shared' // Commented out auto mode
+import { defaultTheme, themeLocalStorageKey, getImplicitPreference } from './shared'
 import { themeIsValid } from './types'
 
 const initialContext: ThemeContextType = {
@@ -23,17 +22,19 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
 
   const setTheme = useCallback((themeToSet: Theme | null) => {
     if (themeToSet === null) {
-      // Commented out auto mode - default to light
-      // window.localStorage.removeItem(themeLocalStorageKey)
-      // const implicitPreference = getImplicitPreference()
-      // document.documentElement.setAttribute('data-theme', implicitPreference || '')
-      // if (implicitPreference) setThemeState(implicitPreference)
-
-      // Default to light when null is passed
-      setThemeState('light')
-      window.localStorage.setItem(themeLocalStorageKey, 'light')
-      document.documentElement.setAttribute('data-theme', 'light')
+      // Reset to system preference
+      window.localStorage.removeItem(themeLocalStorageKey)
+      const implicitPreference = getImplicitPreference()
+      document.documentElement.setAttribute('data-theme', implicitPreference || 'light')
+      if (implicitPreference) setThemeState(implicitPreference)
+    } else if (themeToSet === 'system') {
+      // Set to system preference
+      setThemeState('system')
+      window.localStorage.setItem(themeLocalStorageKey, 'system')
+      const implicitPreference = getImplicitPreference()
+      document.documentElement.setAttribute('data-theme', implicitPreference || 'light')
     } else {
+      // Set specific theme
       setThemeState(themeToSet)
       window.localStorage.setItem(themeLocalStorageKey, themeToSet)
       document.documentElement.setAttribute('data-theme', themeToSet)
@@ -46,17 +47,47 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
 
     if (themeIsValid(preference)) {
       themeToSet = preference
+    } else {
+      const implicitPreference = getImplicitPreference()
+      if (implicitPreference) {
+        themeToSet = implicitPreference
+      }
     }
-    // Commented out auto mode - always default to light
-    // else {
-    //   const implicitPreference = getImplicitPreference()
-    //   if (implicitPreference) {
-    //     themeToSet = implicitPreference
-    //   }
-    // }
 
-    document.documentElement.setAttribute('data-theme', themeToSet)
+    // If theme is 'system', apply the system preference
+    if (themeToSet === 'system') {
+      const implicitPreference = getImplicitPreference()
+      const finalTheme = implicitPreference || 'light'
+      document.documentElement.setAttribute('data-theme', finalTheme)
+    } else {
+      document.documentElement.setAttribute('data-theme', themeToSet)
+    }
+
     setThemeState(themeToSet)
+
+    // Listen for system theme changes
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+    const handleSystemThemeChange = () => {
+      const currentPreference = window.localStorage.getItem(themeLocalStorageKey)
+      if (currentPreference === 'system' || !currentPreference) {
+        const implicitPreference = getImplicitPreference()
+        const finalTheme = implicitPreference || 'light'
+        document.documentElement.setAttribute('data-theme', finalTheme)
+        if (currentPreference === 'system') {
+          setThemeState('system')
+        } else {
+          setThemeState(finalTheme)
+        }
+      }
+    }
+
+    // Add listener for system theme changes
+    mediaQuery.addEventListener('change', handleSystemThemeChange)
+
+    // Cleanup listener on unmount
+    return () => {
+      mediaQuery.removeEventListener('change', handleSystemThemeChange)
+    }
   }, [])
 
   return <ThemeContext value={{ setTheme, theme }}>{children}</ThemeContext>

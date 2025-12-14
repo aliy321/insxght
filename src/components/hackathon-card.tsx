@@ -36,8 +36,28 @@ export function HackathonCard({ title, description, image, website }: Props) {
       </div>
       {website && (
         <div className="mt-4 flex flex-row flex-wrap items-start gap-2">
-          <Link href={website} {...getExternalLinkProps(website)}>
-            <Link2 className="w-4 h-4" />
+          <Link
+            href={website}
+            {...getExternalLinkProps(website)}
+            className="group relative inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-primary hover:text-primary/80 transition-colors rounded-md border border-border hover:border-primary/50 hover:bg-accent/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 w-fit"
+            aria-label={`Visit ${title} website`}
+          >
+            <Link2 className="w-4 h-4 transition-transform group-hover:scale-110" />
+            <span className="text-xs">Visit Website</span>
+            <svg
+              className="absolute -right-1.5 -top-1.5 w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity bg-background rounded-full p-0.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+              />
+            </svg>
           </Link>
         </div>
       )}

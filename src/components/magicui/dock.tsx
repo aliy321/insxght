@@ -9,13 +9,14 @@ export interface DockProps extends VariantProps<typeof dockVariants> {
   className?: string
   magnification?: number
   distance?: number
+  style?: React.CSSProperties
   children: React.ReactNode
 }
 
 const DEFAULT_MAGNIFICATION = 60
 const DEFAULT_DISTANCE = 140
 
-const dockVariants = cva('mx-auto w-max h-full p-2 flex items-end rounded-full border')
+const dockVariants = cva('mx-auto h-full p-2 flex items-end rounded-full border')
 
 const Dock = React.forwardRef<HTMLDivElement, DockProps>(
   (
@@ -24,6 +25,7 @@ const Dock = React.forwardRef<HTMLDivElement, DockProps>(
       children,
       magnification = DEFAULT_MAGNIFICATION,
       distance = DEFAULT_DISTANCE,
+      style,
       ...props
     },
     ref,
@@ -49,6 +51,7 @@ const Dock = React.forwardRef<HTMLDivElement, DockProps>(
         onMouseMove={(e) => mousex.set(e.pageX)}
         onMouseLeave={() => mousex.set(Infinity)}
         {...props}
+        style={{ ...style, width: 'fit-content' }}
         className={cn(dockVariants({ className }))}
       >
         {renderChildren()}
@@ -79,8 +82,10 @@ const DockIcon = ({
   ...props
 }: DockIconProps) => {
   const ref = useRef<HTMLDivElement>(null)
+  const fallbackMousex = useMotionValue(Infinity)
+  const mousexValue = mousex ?? fallbackMousex
 
-  const distanceCalc = useTransform(mousex, (val: number) => {
+  const distanceCalc = useTransform(mousexValue, (val: number) => {
     const bounds = ref.current?.getBoundingClientRect() ?? { x: 0, width: 0 }
     return val - bounds.x - bounds.width / 2
   })

@@ -16,6 +16,7 @@ import { whitelabel } from '@/config/whitelabel'
 
 const MAX_IMAGE_SIZE = 10 * 1024 * 1024 // 10MB
 const MAX_VIDEO_SIZE = 50 * 1024 * 1024 // 50MB
+const MAX_DOCUMENT_SIZE = 10 * 1024 * 1024 // 10MB for PDFs and documents
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -52,7 +53,7 @@ export const Media: CollectionConfig = {
     // staticDir: path.resolve(dirname, '../../public/media'),
     adminThumbnail: 'thumbnail',
     focalPoint: true,
-    mimeTypes: ['image/*', 'video/*'],
+    mimeTypes: ['image/*', 'video/*', 'application/pdf'],
     imageSizes: [
       {
         name: 'thumbnail',
@@ -95,11 +96,27 @@ export const Media: CollectionConfig = {
           if (!fileType) {
             throw new APIError('Invalid file type', 400)
           }
-          const maxSize = fileType === 'image' ? MAX_IMAGE_SIZE : MAX_VIDEO_SIZE
+
+          let maxSize: number
+          let fileTypeName: string
+
+          if (fileType === 'image') {
+            maxSize = MAX_IMAGE_SIZE
+            fileTypeName = 'Image'
+          } else if (fileType === 'video') {
+            maxSize = MAX_VIDEO_SIZE
+            fileTypeName = 'Video'
+          } else if (data.mimeType === 'application/pdf') {
+            maxSize = MAX_DOCUMENT_SIZE
+            fileTypeName = 'PDF'
+          } else {
+            maxSize = MAX_DOCUMENT_SIZE
+            fileTypeName = 'File'
+          }
 
           if (data.filesize > maxSize) {
             throw new APIError(
-              `${fileType.toUpperCase()} files must be smaller than ${maxSize / 1024 / 1024}MB. Current size: ${(data.filesize / (1024 * 1024)).toFixed(1)}MB`,
+              `${fileTypeName} files must be smaller than ${maxSize / 1024 / 1024}MB. Current size: ${(data.filesize / (1024 * 1024)).toFixed(1)}MB`,
               400,
             )
           }

@@ -26,7 +26,7 @@ import {
   createStructuredDataGraph,
 } from '@/utilities/structuredData'
 import Script from 'next/script'
-import Navbar from '@/components/navbar'
+import { NavbarWrapper } from '@/components/navbar-wrapper'
 import LightRays from '@/components/LightRays'
 
 const workSans = Work_Sans({
@@ -84,7 +84,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
           <main className="max-w-2xl mx-auto py-12 sm:py-24 px-6 relative flex flex-col min-h-svh space-y-10 container isolate">
             {children}
-            <Navbar />
+            <NavbarWrapper />
           </main>
 
           {/* <Footer /> */}

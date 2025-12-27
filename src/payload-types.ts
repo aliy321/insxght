@@ -120,6 +120,7 @@ export interface Config {
     projectsSection: ProjectsSection;
     sideProjectsSection: SideProjectsSection;
     contactSection: ContactSection;
+    resume: Resume;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
@@ -133,6 +134,7 @@ export interface Config {
     projectsSection: ProjectsSectionSelect<false> | ProjectsSectionSelect<true>;
     sideProjectsSection: SideProjectsSectionSelect<false> | SideProjectsSectionSelect<true>;
     contactSection: ContactSectionSelect<false> | ContactSectionSelect<true>;
+    resume: ResumeSelect<false> | ResumeSelect<true>;
   };
   locale: null;
   user: User & {
@@ -2149,6 +2151,27 @@ export interface ContactSection {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "resume".
+ */
+export interface Resume {
+  id: number;
+  /**
+   * Show/hide the resume download button in the navigation
+   */
+  enabled?: boolean | null;
+  /**
+   * Upload your resume as a PDF file
+   */
+  resumeFile: number | Media;
+  /**
+   * Text to display on the download button
+   */
+  buttonText?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
@@ -2383,6 +2406,18 @@ export interface ContactSectionSelect<T extends boolean = true> {
         linkText?: T;
         disclaimer?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "resume_select".
+ */
+export interface ResumeSelect<T extends boolean = true> {
+  enabled?: T;
+  resumeFile?: T;
+  buttonText?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

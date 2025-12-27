@@ -24,6 +24,7 @@ import { Skills } from './payload/globals/Skills'
 import { ProjectsSection } from './payload/globals/ProjectsSection'
 import { SideProjectsSection } from './payload/globals/SideProjectsSection'
 import { ContactSection } from './payload/globals/ContactSection'
+import { Resume } from './payload/globals/Resume'
 import { RouteSEO } from './payload/collections/RouteSEO'
 import { plugins } from './plugins'
 import { defaultLexical } from '@/components/fields/defaultLexical'
@@ -133,6 +134,7 @@ export default buildConfig({
     ProjectsSection,
     SideProjectsSection,
     ContactSection,
+    Resume,
   ],
   plugins: [
     ...plugins,

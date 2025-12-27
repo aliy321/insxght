@@ -8,7 +8,8 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { whitelabel } from '@/config/whitelabel'
 import { cn } from '@/utilities/ui'
 import Link from 'next/link'
-import { ArrowUp } from 'lucide-react'
+import { ArrowUp, FileText } from 'lucide-react'
+import type { Resume as ResumeType, Media } from '@/payload-types'
 
 function BackToTopButton() {
   const scrollToTop = () => {
@@ -35,7 +36,70 @@ function BackToTopButton() {
   )
 }
 
-export default function Navbar() {
+interface ResumeButtonProps {
+  resumeData: ResumeType | null
+}
+
+function ResumeButton({ resumeData }: ResumeButtonProps) {
+  if (!resumeData?.enabled || !resumeData?.resumeFile) {
+    return null
+  }
+
+  const resumeFile = resumeData.resumeFile as Media
+  const resumeUrl = typeof resumeFile === 'object' ? resumeFile.url : null
+  const fileName = typeof resumeFile === 'object' ? resumeFile.filename : 'resume.pdf'
+
+  if (!resumeUrl) {
+    return null
+  }
+
+  const handleDownload = async (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault()
+
+    try {
+      const response = await fetch(resumeUrl)
+      const blob = await response.blob()
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = fileName || 'resume.pdf'
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      window.URL.revokeObjectURL(url)
+    } catch (error) {
+      console.error('Error downloading resume:', error)
+      // Fallback to direct link
+      window.open(resumeUrl, '_blank')
+    }
+  }
+
+  return (
+    <DockIcon>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <a
+            href={resumeUrl}
+            onClick={handleDownload}
+            className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }), 'size-10 sm:size-12')}
+            aria-label="Download Resume"
+          >
+            <FileText className="size-3 sm:size-4" />
+          </a>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>{resumeData.buttonText || 'Resume'}</p>
+        </TooltipContent>
+      </Tooltip>
+    </DockIcon>
+  )
+}
+
+interface NavbarProps {
+  resumeData?: ResumeType | null
+}
+
+export default function Navbar({ resumeData }: NavbarProps) {
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 w-full">
       {/* Navbar content */}
@@ -65,6 +129,7 @@ export default function Navbar() {
                 </Tooltip>
               </DockIcon>
             ))}
+          <ResumeButton resumeData={resumeData ?? null} />
           <Separator orientation="vertical" className="h-full py-2" />
           <DockIcon>
             <Tooltip>
